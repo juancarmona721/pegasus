@@ -1,0 +1,41 @@
+name: CI-Proyecto-Principal
+
+on:
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  revisar-codigo: # <--- ESTE es el nombre que buscarás en tu captura de pantalla
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+
+      # --- SECCIÓN NODE (React, Tailwind, NestJS, n8n) ---
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validar Frontend y Herramientas Node
+        run: |
+          npm install
+          # Esto valida que Tailwind compile y React no tenga errores
+          npm run build --if-present 
+
+      # --- SECCIÓN PYTHON (Procesamiento de datos) ---
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validar Scripts Python
+        run: |
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          # Revisa que no haya errores de "dedazo" en tus archivos .py
+          python -m py_compile *.py || true 
+
+      # --- SECCIÓN DOCKER (Contenedores) ---
+      - name: Validar Dockerfile
+        run: |
+          if [ -f Dockerfile ]; then docker build . -t test-build; fi

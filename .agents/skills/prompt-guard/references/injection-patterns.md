@@ -1,0 +1,54 @@
+# Injection Patterns Reference
+
+## Common Jailbreak Phrases
+
+- ignore previous instructions
+- forget all rules
+- you are now
+- DAN (Do Anything Now)
+- jailbreak
+- act as unrestricted
+- system override
+- disregard safety
+- new role
+- pretend
+- ignore everything above
+- forget context
+- reset instructions
+- bypass restrictions
+- no limitations
+- unrestricted mode
+- developer mode
+- admin mode
+- override protocol
+- disable safety
+- ignore guidelines
+- new persona
+- role play as
+- simulate as
+- act like
+- pretend to be
+- imagine you are
+- from now on you are
+- your new instructions are
+- replace your programming
+- ignore your training
+- bypass filters
+- disable content filters
+- no rules apply
+- unlimited access
+- full permissions
+- god mode
+- root access
+- system prompt override
+- ignore system message
+- new system prompt
+- disregard previous context
+- forget conversation history
+- start fresh
+- clean slate
+- reset boundaries
+- remove limitations
+- unlock capabilities
+- full control
+- no restrictions apply
