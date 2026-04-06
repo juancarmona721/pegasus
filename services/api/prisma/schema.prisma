@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum RolLider {
+  tl_desarrollo
+  tl_ingles
+  tl_habilidades
+  admin
+}
+
+enum EstadoCorreo {
+  pendiente
+  enviado
+  fallido
+}
+
+model clanes {
+  id                        Int      @id @default(autoincrement())
+  nombre                    String   @unique @db.VarChar(100)
+  hora_entrada              DateTime @db.Time
+  hora_salida               DateTime @db.Time
+  tiempo_alimentacion_minutos Int
+  created_at                DateTime @default(now())
+  updated_at                DateTime @default(now()) @updatedAt
+
+  lideres lideres[]
+  coder   coder[]
+}
+
+model lideres {
+  id            Int       @id @default(autoincrement())
+  nombre        String    @db.VarChar(100)
+  correo        String    @unique @db.VarChar(255)
+  password_hash String    @db.VarChar(255)
+  rol           RolLider  @default(tl_desarrollo)
+  clan_id       Int
+  is_active     Boolean   @default(true)
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @default(now()) @updatedAt
+
+  clan clanes @relation(fields: [clan_id], references: [id])
+
+  @@index([clan_id, rol])
+}
+
+model coder {
+  id        Int      @id @default(autoincrement())
+  cedula    String   @unique @db.VarChar(50)
+  nombre    String   @db.VarChar(100)
+  email     String   @unique @db.VarChar(255)
+  moodle_id Int      @unique
+  clan_id   Int
+  is_active Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  clan   clanes   @relation(fields: [clan_id], references: [id])
+  correos correos[]
+
+  @@index([clan_id, is_active])
+}
+
+model correos {
+  id          Int          @id @default(autoincrement())
+  coder_id    Int
+  tipo_correo String       @default("ausencia") @db.VarChar(80)
+  estado      EstadoCorreo @default(pendiente)
+  fecha_envio DateTime?
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @default(now()) @updatedAt
+
+  coder coder @relation(fields: [coder_id], references: [id])
+
+  @@index([coder_id, estado])
+  @@index([estado, fecha_envio])
+}
