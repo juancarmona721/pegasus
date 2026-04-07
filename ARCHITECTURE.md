@@ -868,7 +868,7 @@ pegasus/
 │   └── processing/
 └── scripts/
 ```
-###ja
+###jads
 ## 11. Decisiones de diseño y justificaciones
 1. **Decision**: WebSockets (Socket.IO) para actualizacion en vivo del dashboard → **Alternativa descartada**: polling exclusivo cada N segundos → **Justificacion**: menor latencia para estado de tokens y correos, y menor carga constante sobre MySQL/API en horario pico.
 2. **Decision**: Nodemailer integrado en `api-node` para correos de ausencia → **Alternativa descartada**: n8n → **Justificacion**: menos componentes operativos, versionado de plantilla en repositorio y trazabilidad directa con `email_logs` + endpoint de reenvio manual.
