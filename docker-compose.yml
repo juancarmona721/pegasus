@@ -1,0 +1,82 @@
+version: "3.9"
+
+services:
+  api-node:
+    build:
+      context: ./services/api
+      dockerfile: Dockerfile
+    image: pegasus/api-node:latest
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: 3000
+      DATABASE_URL: ${DATABASE_URL}
+      WS_CORS_ORIGIN: ${WS_CORS_ORIGIN:-http://localhost:5173}
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./services/api:/app
+      - /app/node_modules
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:3000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 25s
+    restart: unless-stopped
+
+  python-jobs:
+    build:
+      context: ./services/processing
+      dockerfile: Dockerfile
+    image: pegasus/python-jobs:latest
+    env_file:
+      - .env
+    environment:
+      PYTHONUNBUFFERED: "1"
+      DATABASE_URL: ${DATABASE_URL}
+      API_INTERNAL_BASE_URL: http://api-node:3000
+    command: sh -c "pip install -r requirements.txt && python cron.py"
+    volumes:
+      - ./services/processing:/app
+      - ./data/turnstile:/data/turnstile
+      - ./templates:/templates
+    depends_on:
+      api-node:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: pegasus/frontend:latest
+    env_file:
+      - .env
+    environment:
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:3000/api/v1}
+      VITE_WS_URL: ${VITE_WS_URL:-ws://localhost:3000}
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 5173"
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      api-node:
+        condition: service_healthy
+    restart: unless-stopped
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    profiles: ["dev-mail"]
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    restart: unless-stopped
+
+networks:
+  default:
+    name: pegasus-net
