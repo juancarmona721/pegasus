@@ -843,78 +843,30 @@ Decision: WebSockets con Socket.IO desde `api-node` (sin Supabase Realtime).
 ## 10. Estructura de carpetas del proyecto
 ```text
 pegasus/
-├── ARCHITECTURE.md
-├── docker-compose.yml
-├── .env.example
 ├── data/
 │   └── turnstile/
-│       ├── export.csv
-│       └── export.json
 ├── templates/
-│   └── absence_template.md
 ├── frontend/
-│   ├── Dockerfile
-│   ├── package.json
-│   ├── tailwind.config.js
-│   ├── postcss.config.js
 │   └── src/
-│       ├── main.jsx
-│       ├── App.jsx
-│       ├── api/client.js
-│       ├── context/DashboardContext.jsx
-│       ├── hooks/useDashboardSocket.js
-│       ├── pages/DashboardPage.jsx
+│       ├── api/
+│       ├── context/
+│       ├── hooks/
+│       ├── pages/
 │       └── components/
-│           ├── ClanFilter.jsx
-│           ├── MorningLeakTable.jsx
-│           ├── WeeklyPatternPanel.jsx
-│           ├── StudentSearchPanel.jsx
-│           ├── EmailStatusTable.jsx
-│           └── TokenRealtimePanel.jsx
 ├── services/
 │   ├── api/
-│   │   ├── Dockerfile
-│   │   ├── package.json
 │   │   ├── prisma/
-│   │   │   ├── schema.prisma
 │   │   │   └── migrations/
 │   │   ├── config/
-│   │   │   ├── env.js
 │   │   │   └── email/
-│   │   │       ├── absence.hbs
-│   │   │       └── template.config.json
 │   │   └── src/
-│   │       ├── server.js
-│   │       ├── app.js
-│   │       ├── db/mysql.js
-│   │       ├── sockets/index.js
-│   │       ├── middleware/auth.js
+│   │       ├── db/
+│   │       ├── sockets/
+│   │       ├── middleware/
 │   │       ├── routes/
-│   │       │   ├── processing.routes.js
-│   │       │   ├── access.routes.js
-│   │       │   ├── emails.routes.js
-│   │       │   ├── tokens.routes.js
-│   │       │   ├── dashboard.routes.js
-│   │       │   └── students.routes.js
 │   │       └── services/
-│   │           ├── emailSender.service.js
-│   │           ├── dashboard.service.js
-│   │           └── tokenValidation.service.js
 │   └── processing/
-│       ├── Dockerfile
-│       ├── requirements.txt
-│       ├── parser.py
-│       ├── evaluators.py
-│       ├── cron.py
-│       ├── moodle_client.py
-│       ├── seeder.py
-│       ├── token_jobs.py
-│       ├── email_queue_job.py
-│       ├── db.py
-│       └── config.py
 └── scripts/
-    ├── wait-for-db.sh
-    └── bootstrap-dev.sh
 ```
 
 ## 11. Decisiones de diseño y justificaciones
