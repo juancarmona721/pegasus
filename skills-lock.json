@@ -11,11 +11,6 @@
       "sourceType": "github",
       "computedHash": "9feb517089c269af4fdab5031dea1100a92fd50081e906ccfaf8a971858e39f9"
     },
-    "find-skills": {
-      "source": "vercel-labs/skills",
-      "sourceType": "github",
-      "computedHash": "645b891da1edbae76ab79c7b088d4e73397464f8396edaf773c0e01971ce75d6"
-    },
     "frontend-design": {
       "source": "anthropics/skills",
       "sourceType": "github",
