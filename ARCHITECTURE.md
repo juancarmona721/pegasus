@@ -32,7 +32,7 @@ flowchart LR
 | API REST | Node.js + Express | Node 20 LTS, Express 4.19 | Endpoints de dashboard, operaciones manuales, envio de correos, WebSocket |
 | Frontend | React + Tailwind CSS | React 18, Tailwind 3.4 | Dashboard administrativo, filtros globales, busqueda y vistas semanales |
 | Tiempo real | Socket.IO (sobre Node.js) | Socket.IO 4.x | Actualizaciones en vivo de tokens, correos y procesamiento |
-| ORM/DB driver Node | `mysql2` + `knex` | mysql2 3.x, knex 3.x | Acceso SQL tipado y migraciones |
+| ORM Node | Prisma | 7.6.x | Acceso SQL tipado, schema declarativo y migraciones |
 | ORM/DB driver Python | SQLAlchemy + mysqlclient | SQLAlchemy 2.x | Lectura/escritura transaccional en jobs batch |
 | Scheduler | APScheduler (Python) | 3.10+ | Ejecucion por cron configurable (seeder, ausencias, tokens, expiraciones) |
 | Correos | Nodemailer | 6.x | Envio SMTP de ausencias y reenvio manual desde dashboard |
@@ -64,7 +64,7 @@ services:
       PORT: 3000
       DATABASE_URL: ${DATABASE_URL}
       WS_CORS_ORIGIN: ${WS_CORS_ORIGIN:-http://localhost:5173}
-    command: sh -c "npm install && npm run dev"
+    command: sh -c "npx prisma generate && npm install && npm run dev"
     ports:
       - "3000:3000"
     volumes:
@@ -360,7 +360,7 @@ erDiagram
 - Cadena principal: `DATABASE_URL=mysql://<DB_USER>:<DB_PASSWORD>@<DB_HOST>:<DB_PORT>/<DB_NAME>?ssl=true`.
 - Variables equivalentes Railway: `MYSQLHOST`, `MYSQLPORT`, `MYSQLUSER`, `MYSQLPASSWORD`, `MYSQLDATABASE`.
 - Requisito de seguridad: TLS habilitado para conexiones productivas y rotacion trimestral de credenciales.
-- Politica operativa: migraciones solo desde `api-node` con `knex migrate:latest`; `python-jobs` solo consume esquema ya migrado.
+- Politica operativa: migraciones solo desde `api-node` con `prisma migrate deploy`; `python-jobs` solo consume esquema ya migrado.
 
 ## 5. Flujos de datos por épica
 ### EP-01 — Conexion al Torniquete
@@ -875,9 +875,9 @@ pegasus/
 │   ├── api/
 │   │   ├── Dockerfile
 │   │   ├── package.json
-│   │   ├── knexfile.js
-│   │   ├── migrations/
-│   │   ├── seeds/
+│   │   ├── prisma/
+│   │   │   ├── schema.prisma
+│   │   │   └── migrations/
 │   │   ├── config/
 │   │   │   ├── env.js
 │   │   │   └── email/
@@ -970,3 +970,4 @@ pegasus/
 |---------|-------|--------|
 | 1.0 | 2026-03-31 | Versión inicial generada por agente arquitecto |
 | 1.1 | 2026-04-03 | Corrección modelo de datos: tabla clanes y lideres, fix título §8, convenciones de nomenclatura |
+| 1.2 | 2026-04-06 | Actualización ORM: Prisma reemplaza knex, estructura de carpetas actualizada |
